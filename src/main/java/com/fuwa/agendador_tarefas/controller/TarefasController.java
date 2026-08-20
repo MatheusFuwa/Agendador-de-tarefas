@@ -1,0 +1,22 @@
+package com.fuwa.agendador_tarefas.controller;
+
+import com.fuwa.agendador_tarefas.business.TarefaService;
+import com.fuwa.agendador_tarefas.business.dto.TarefasDTO;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/tarefas")
+@RequiredArgsConstructor
+
+public class TarefasController {
+    private final TarefaService tarefaService;
+
+    @PostMapping
+    public ResponseEntity<TarefasDTO> gravarTarefas(@RequestBody TarefasDTO dto,
+                                                    @RequestHeader("Authorization") String token){
+        return ResponseEntity.ok(tarefaService.GravarTarefa(token,dto));
+    }
+}

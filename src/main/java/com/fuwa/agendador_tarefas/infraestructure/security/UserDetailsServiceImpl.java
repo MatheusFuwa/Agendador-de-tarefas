@@ -1,16 +1,11 @@
 package com.fuwa.agendador_tarefas.infraestructure.security;
 
 
-
 import com.fuwa.agendador_tarefas.business.dto.UsuarioDTO;
 import com.fuwa.agendador_tarefas.infraestructure.client.UsuarioClient;
-import com.fuwa.usuario.infrastructure.entity.Usuario;
-import com.fuwa.usuario.infrastructure.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
