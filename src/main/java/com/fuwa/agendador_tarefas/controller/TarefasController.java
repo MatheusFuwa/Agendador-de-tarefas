@@ -2,10 +2,10 @@ package com.fuwa.agendador_tarefas.controller;
 
 import com.fuwa.agendador_tarefas.business.TarefaService;
 import com.fuwa.agendador_tarefas.business.dto.TarefasDTO;
+import com.fuwa.agendador_tarefas.infraestructure.enums.StatusNotificacaoEnum;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -35,6 +35,24 @@ public class TarefasController {
     @GetMapping
     public ResponseEntity<List<TarefasDTO>> buscaTarefaPorEmail(@RequestHeader("Authorization")String token){
         return ResponseEntity.ok(tarefaService.BuscaTarefasPorEmail(token));
+    }
+
+    @DeleteMapping
+    public ResponseEntity<Void> deletaTarefaPorId(@RequestParam("id") String id){
+        tarefaService.deletaTarefaPorId(id);
+
+        return ResponseEntity.ok().build();
+    }
+
+    @PatchMapping
+    public ResponseEntity<TarefasDTO> alteraStatusNotificacao(@RequestParam("status")StatusNotificacaoEnum status,
+                                                              @RequestParam("id") String id){
+        return ResponseEntity.ok(tarefaService.alretaStatus(status, id));
+    }
+
+    @PutMapping
+    public ResponseEntity<TarefasDTO> uptadeTarefas(@RequestBody TarefasDTO dto, @RequestParam("id") String id){
+        return ResponseEntity.ok(tarefaService.uptadeTarefas(dto, id));
     }
 
 }
