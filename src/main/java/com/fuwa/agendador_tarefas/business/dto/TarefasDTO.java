@@ -14,8 +14,8 @@ import java.time.LocalDateTime;
 
 public class TarefasDTO {
     private String id;
-    private String NomeTarefa;
-    private String Descricao;
+    private String nomeTarefa;
+    private String descricao;
     private LocalDateTime dataCriacao;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
     private LocalDateTime dataEvento;
