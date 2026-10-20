@@ -3,7 +3,7 @@ package com.fuwa.agendador_tarefas.business;
 import com.fuwa.agendador_tarefas.business.dto.TarefasDTO;
 import com.fuwa.agendador_tarefas.business.mapper.TarefaUptadeConverter;
 import com.fuwa.agendador_tarefas.business.mapper.TarefasConverter;
-import com.fuwa.agendador_tarefas.infraestructure.Exeptions.ResorceNotFoundExeption;
+import com.fuwa.agendador_tarefas.infraestructure.Exeptions.ResorceNotFoundException;
 import com.fuwa.agendador_tarefas.infraestructure.entity.TarefasEntity;
 import com.fuwa.agendador_tarefas.infraestructure.enums.StatusNotificacaoEnum;
 import com.fuwa.agendador_tarefas.infraestructure.repository.TarefasRepository;
@@ -35,7 +35,8 @@ public class TarefaService {
 
     public List<TarefasDTO> buscaTarefasAgendadasPorPeriodo(LocalDateTime dataInicial, LocalDateTime dataFinal) {
         return tarefasConverter.paraListaTarefasDTO(
-                tarefasRepository.findByDataEventoBetween(dataInicial, dataFinal));
+                tarefasRepository.findByDataEventoBetweenAndStatusNotificacaoEnum(dataInicial, dataFinal,
+                        StatusNotificacaoEnum.PENDENTE));
     }
 
     public List<TarefasDTO> BuscaTarefasPorEmail(String token) {
@@ -46,33 +47,33 @@ public class TarefaService {
     public void deletaTarefaPorId(String id) {
         try {
             tarefasRepository.deleteById(id);
-        } catch (ResorceNotFoundExeption e) {
-            throw new ResorceNotFoundExeption("Erro ao deletar tarefar por id, id inexistente " + id, e.getCause());
+        } catch (ResorceNotFoundException e) {
+            throw new ResorceNotFoundException("Erro ao deletar tarefar por id, id inexistente " + id, e.getCause());
         }
     }
 
     public TarefasDTO alretaStatus(StatusNotificacaoEnum status, String id) {
         try {
             TarefasEntity entity = tarefasRepository.findById(id).
-                    orElseThrow(() -> new ResorceNotFoundExeption("Tarefa não encontrada " + id));
+                    orElseThrow(() -> new ResorceNotFoundException("Tarefa não encontrada " + id));
 
             entity.setStatusNotificacaoEnum(status);
             return tarefasConverter.paraTarefaDTO(tarefasRepository.save(entity));
-        } catch (ResorceNotFoundExeption e) {
-            throw new ResorceNotFoundExeption("Erro ao tentar alterar status da tarefa " + e.getCause());
+        } catch (ResorceNotFoundException e) {
+            throw new ResorceNotFoundException("Erro ao tentar alterar status da tarefa " + e.getCause());
         }
     }
 
     public TarefasDTO uptadeTarefas(TarefasDTO dto, String id) {
         try {
             TarefasEntity entity = tarefasRepository.findById(id).
-                    orElseThrow(() -> new ResorceNotFoundExeption("Tarefa não encontrada " + id));
+                    orElseThrow(() -> new ResorceNotFoundException("Tarefa não encontrada " + id));
 
             tarefaUptadeConverter.uptadeTarefas(dto, entity);
             return tarefasConverter.paraTarefaDTO(tarefasRepository.save(entity));
 
-        } catch (ResorceNotFoundExeption e) {
-            throw new ResorceNotFoundExeption("Erro ao tentar alterar status da tarefa " + e.getCause());
+        } catch (ResorceNotFoundException e) {
+            throw new ResorceNotFoundException("Erro ao tentar alterar status da tarefa " + e.getCause());
         }
     }
 }
